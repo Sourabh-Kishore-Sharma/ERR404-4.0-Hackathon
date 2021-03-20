@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import webbrowser, os
 import json
 import boto3
@@ -5,6 +7,10 @@ import io
 from io import BytesIO
 import sys
 from pprint import pprint
+
+import tempfile
+from pdf2image import convert_from_path
+import pikepdf
 
 
 def get_rows_columns_map(table_result, blocks_map):
@@ -97,13 +103,20 @@ def main(file_name):
     output_file = 'output.csv'
 
     # replace content
-    with open(output_file, "wt") as fout:
+    with open(output_file, "at") as fout:
         fout.write(table_csv)
 
     # show the results
-    print('CSV OUTPUT FILE: ', output_file)
+    #print('CSV OUTPUT FILE: ', output_file)
 
 
 if __name__ == "__main__":
-    file_name = sys.argv[1]
-    main(file_name)
+    pdf_path = "./"
+    img_path = "./Img"
+    for file in os.listdir(pdf_path):
+        if(file[-4:]==".pdf"):
+            with tempfile.TemporaryDirectory() as path:
+                convert_from_path(file,output_folder="./Img",fmt="jpeg")
+            for img in os.listdir(img_path):
+                if img[-4:]==".jpg":
+                    main(img_path+"/"+img)
