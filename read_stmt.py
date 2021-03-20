@@ -61,7 +61,7 @@ def get_table_csv_results(file_name):
 
     # Get the text blocks
     blocks=response['Blocks']
-    pprint(blocks)
+    #pprint(blocks)
 
     blocks_map = {}
     table_blocks = []
@@ -114,9 +114,10 @@ if __name__ == "__main__":
     pdf_path = "./"
     img_path = "./Img"
     for file in os.listdir(pdf_path):
-        if(file[-4:]==".pdf"):
+        if(file[-4:] ==".pdf"):
             with tempfile.TemporaryDirectory() as path:
-                convert_from_path(file,output_folder="./Img",fmt="jpeg")
-            for img in os.listdir(img_path):
-                if img[-4:]==".jpg":
+                convert_from_path(file,output_folder = "./Img",fmt = "jpeg")
+            for img in sorted(os.listdir(img_path)):
+                if img[-4:] == ".jpg":
                     main(img_path+"/"+img)
+                    os.remove(img_path+"/"+img)
